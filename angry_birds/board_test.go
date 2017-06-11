@@ -50,11 +50,11 @@ func TestPositions(t *testing.T) {
 		[]FigureOnBoard{},
 	}
 
-	fmt.Println(b)
+	//fmt.Println(b)
 
 	p := Positions(f, b)
 	if len(p) != 2 {
-		fmt.Println(p)
+		//fmt.Println(p)
 		t.Error("Positions != 2", len(p))
 	}
 }
@@ -77,10 +77,10 @@ func TestBoardPrinting(t *testing.T) {
 	}
 
 	result := fmt.Sprintf("%v", b)
-	expected := "\nABCD\nBCDX\nDXXX"
+	expected := "ABCD\nBCDX\nDXXX"
 
 	if result != expected {
-		t.Errorf("%s\n%s\n%s\n%s", "Board printed incorrectly", result, "Expected:", expected)
+		t.Errorf("%s\n%q\n%s\n%q", "Board printed incorrectly", result, "Expected:", expected)
 	}
 
 }

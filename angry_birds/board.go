@@ -9,6 +9,8 @@ type Pig rune
 
 type Figure []string
 
+var Skip string = "."
+
 // FigureOnBoard Figure positioned on board
 // x - horizontal left to right
 // y - vertical top down
@@ -25,7 +27,7 @@ type Board struct {
 
 // String function prints Board with figures
 func (b Board) String() string {
-	output := ""
+	output := []string{}
 
 	// Print background
 	for _, row := range b.board {
@@ -34,12 +36,21 @@ func (b Board) String() string {
 			rs = append(rs, string(x))
 		}
 		s := strings.Join(rs, "")
-		output += s + "\n"
+		output = append(output, s)
 	}
 
-	// TODO: Print figures
+	for _, f := range b.figures {
+		for j, row := range f.figure {
+			for i, x := range row {
+				if string(x) != Skip {
+					old := output[f.y+j]
+					output[f.y+j] = old[:(f.x+i)] + string(x) + old[(f.x+i+1):]
+				}
+			}
+		}
+	}
 
-	return output
+	return strings.Join(output, "\n")
 }
 
 func pigs(s string) []Pig {
@@ -103,14 +114,14 @@ func (figure Figure) notEqual(other Figure) bool {
 	return !figure.equal(other)
 }
 
-// positions returns slice of possible positions of figure on board
+// Positions returns possible positions of figure on board
 func Positions(figure Figure, board Board) []FigureOnBoard {
 	p := make([]FigureOnBoard, 0)
 	bw, bh := len(board.board[0]), len(board.board)
 	fw, fh := len(figure[0]), len(figure)
 
-	fmt.Println("Board ", bw, " x ", bh)
-	fmt.Println("Figure ", fw, " x ", fh)
+	//fmt.Println("Board ", bw, " x ", bh)
+	//fmt.Println("Figure ", fw, " x ", fh)
 
 	for x := 0; x <= bw-fw; x++ {
 		for y := 0; y <= bh-fh; y++ {
