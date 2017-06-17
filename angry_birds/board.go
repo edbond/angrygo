@@ -131,3 +131,41 @@ func Positions(figure Figure, board Board) []FigureOnBoard {
 
 	return p
 }
+
+// rotations returns all valid rotations of figure f
+// excluding duplicates
+func rotations(f Figure) []Figure {
+	results := []Figure{f}
+	var r Figure = f
+
+	for range []int{1, 2, 3} {
+		r = r.RotateCW()
+
+		var found bool = false
+
+		// Find if there is already such rotation
+		for _, x := range results {
+			if x.equal(r) {
+				found = true
+			}
+		}
+
+		if !found {
+			results = append(results, r)
+		}
+	}
+	return results
+}
+
+func solutions(board Board, figures []Figure, left []string) []Board {
+	results := []Board{}
+
+	// Slice of figures possible rotations
+	rots := [][]Figure{}
+
+	for _, f := range figures {
+		rots = append(rots, rotations(f))
+	}
+
+	return results
+}

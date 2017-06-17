@@ -2,6 +2,7 @@ package angry_birds
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -83,4 +84,64 @@ func TestBoardPrinting(t *testing.T) {
 		t.Errorf("%s\n%q\n%s\n%q", "Board printed incorrectly", result, "Expected:", expected)
 	}
 
+}
+
+func TestRotations(t *testing.T) {
+	f := Figure{
+		"X",
+		"X",
+	}
+
+	expected := []Figure{
+		{"X", "X"},
+		{"XX"},
+	}
+
+	results := rotations(f)
+	if len(results) != 2 {
+		t.Error("Invalid rotations", f, results)
+	}
+
+	if !reflect.DeepEqual(results, expected) {
+		t.Error("Rotations invalid", results, "Expected", expected)
+	}
+}
+
+func TestFull(t *testing.T) {
+	figures := []Figure{
+		{
+			".X.",
+			"XXX",
+		},
+		{
+			"YY",
+			"YY",
+			"Y.",
+		},
+	}
+
+	board := Board{
+		board: [][]Pig{
+			pigs(" ABCD"),
+			pigs("BCFEA"),
+			pigs(" DEFA"),
+			pigs("ABFED"),
+			pigs("DBEA "),
+		},
+		figures: []FigureOnBoard{},
+	}
+
+	// A list of board pieces should left uncovered
+	target := []string{"E", "C"}
+
+	// For all combinations of figure rotations AND
+	// all figure positions on board
+	// DO following checks:
+	// - figures don't overlap
+	// - board has uncovered requested positions
+
+	results := solutions(board, figures, target)
+	if len(results) != 1 {
+		t.Error("No results found")
+	}
 }
