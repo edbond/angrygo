@@ -107,6 +107,79 @@ func TestRotations(t *testing.T) {
 	}
 }
 
+func TestPermutations(t *testing.T) {
+	input := [][]int{
+		{1, 2},
+		{3},
+		{6, 7},
+	}
+
+	expected := [][]int{
+		{1, 3, 6},
+		{2, 3, 6},
+		{1, 3, 7},
+		{2, 3, 7},
+	}
+
+	result := permutations(input)
+	if len(result) != len(expected) {
+		t.Error("Invalid number of permutation results", len(result), "expected", len(expected))
+	}
+
+	if !reflect.DeepEqual(result, expected) {
+		t.Error("Result != Expected", result, " != ", expected)
+	}
+
+}
+
+func TestPermutations2(t *testing.T) {
+	input := [][]int{
+		{0, 1},
+		{0},
+	}
+
+	expected := [][]int{
+		{0, 0},
+		{1, 0},
+	}
+
+	result := permutations(input)
+	if len(result) != len(expected) {
+		t.Error("Invalid number of permutation results", len(result), "expected", len(expected))
+	}
+
+	if !reflect.DeepEqual(result, expected) {
+		t.Error("Result != Expected", result, " != ", expected)
+	}
+
+}
+
+func TestFigureCombinations(t *testing.T) {
+	input := [][]Figure{
+		{Figure{"X", "X"}, Figure{"XX"}},
+		{Figure{
+			"X",
+			"XX",
+			"XX",
+		}},
+	}
+
+	expected := [][]Figure{
+		{Figure{"X", "X"}, Figure{"X", "XX", "XX"}},
+		{Figure{"XX"}, Figure{"X", "XX", "XX"}},
+	}
+
+	result := FigureCombinations(input)
+
+	if len(result) != len(expected) {
+		t.Error("Figure combinations count not correct", len(result), " != ", len(expected))
+	}
+
+	if !reflect.DeepEqual(result, expected) {
+		t.Error("Figure combinations are not correct", " Result ", result, " Expected ", expected)
+	}
+}
+
 func TestFull(t *testing.T) {
 	figures := []Figure{
 		{

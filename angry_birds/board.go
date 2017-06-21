@@ -2,6 +2,7 @@ package angry_birds
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -114,11 +115,27 @@ func (figure Figure) notEqual(other Figure) bool {
 	return !figure.equal(other)
 }
 
+func (figure Figure) width() int {
+	return len(figure[0])
+}
+
+func (figure Figure) height() int {
+	return len(figure)
+}
+
+func (board Board) width() int {
+	return len(board.board[0])
+}
+
+func (board Board) height() int {
+	return len(board.board)
+}
+
 // Positions returns possible positions of figure on board
 func Positions(figure Figure, board Board) []FigureOnBoard {
 	p := make([]FigureOnBoard, 0)
-	bw, bh := len(board.board[0]), len(board.board)
-	fw, fh := len(figure[0]), len(figure)
+	bw, bh := board.width(), board.height()
+	fw, fh := figure.width(), figure.height()
 
 	//fmt.Println("Board ", bw, " x ", bh)
 	//fmt.Println("Figure ", fw, " x ", fh)
@@ -157,6 +174,95 @@ func rotations(f Figure) []Figure {
 	return results
 }
 
+func permutations(input [][]int) [][]int {
+	m := [][]int{}
+
+	l := len(input)
+	i := make([]int, l)
+
+	current_i := 0
+
+	// last index of each row
+	ends := make([]int, l)
+	for j, x := range input {
+		ends[j] = len(x) - 1
+	}
+
+	var found bool
+
+	for {
+		current := make([]int, l)
+		// get current perm
+		for j, v := range i {
+			current[j] = input[j][v]
+		}
+
+		//fmt.Println("Current perm", current)
+		//fmt.Println("Indexes", i)
+
+		m = append(m, current)
+
+		// exit if we get to the end
+		if reflect.DeepEqual(i, ends) {
+			break
+		}
+
+		// Make current I +1
+		// if result > available in this row
+		// get to next and try to increase
+		// if success reset all left to 0
+		// start over
+		// if no success - break
+		found = false
+		for j := range i {
+			if i[j] < ends[j] {
+				current_i = j
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			break
+		}
+
+		// increase current index
+		// and reset all to the left
+		i[current_i] += 1
+		for j := 0; j < (current_i - 1); j++ {
+			i[j] = 0
+		}
+
+		//fmt.Println("Indexes updated", i)
+	}
+
+	return m
+}
+
+func FigureCombinations(rows [][]Figure) [][]Figure {
+	sets := [][]Figure{}
+
+	// get indices
+	indices := make([][]int, len(rows))
+
+	for i, r := range rows {
+		x := make([]int, 0)
+		for j := 0; j < len(r); j++ {
+			x = append(x, j)
+		}
+		indices[i] = x
+	}
+
+	for _, p := range permutations(indices) {
+		f := []Figure{}
+		for n, pi := range p {
+			f = append(f, rows[n][pi])
+		}
+		sets = append(sets, f)
+	}
+	return sets
+}
+
 func solutions(board Board, figures []Figure, left []string) []Board {
 	results := []Board{}
 
@@ -165,6 +271,28 @@ func solutions(board Board, figures []Figure, left []string) []Board {
 
 	for _, f := range figures {
 		rots = append(rots, rotations(f))
+	}
+
+	// Get possible combinations
+	figureSets := FigureCombinations(rots)
+
+	// For each set of figures position them on board
+	for _, set := range figureSets {
+		coords := [][]int{}
+		for _, f := range set {
+			// get possible position coordinates
+			for j := 0; j < board.height()-f.height(); j++ {
+				for i := 0; i < board.width()-f.width(); i++ {
+					coords = append(coords, []int{i, j})
+				}
+			}
+		}
+
+		fmt.Println("Board,", board)
+		fmt.Println("Figures", set)
+		for i, p := range permutations(coords) {
+			fmt.Println("Positions on board", p)
+		}
 	}
 
 	return results
