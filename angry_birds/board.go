@@ -1,10 +1,12 @@
-package angry_birds
+package main
 
 import (
 	"fmt"
 	"reflect"
 	"strings"
 )
+
+import "github.com/pkg/profile"
 
 type Pig rune
 
@@ -59,25 +61,17 @@ func (b Board) String() string {
 
 // valid returns true if figures on Board doesn't overlap
 func (board Board) valid() bool {
-	for i, f := range board.figures {
-		for n, g := range board.figures {
-			if n == i {
-				continue
-			}
+	vboard := map[Coord]bool{}
 
-			vboard := map[Coord]bool{}
-
-			for _, fig := range []FigureOnBoard{f, g} {
-				for j, row := range fig.figure {
-					for i, v := range row {
-						if string(v) != Skip {
-							coord := Coord{i + fig.x, j + fig.y}
-							if vboard[coord] {
-								return false
-							} else {
-								vboard[coord] = true
-							}
-						}
+	for _, fig := range board.figures {
+		for j, row := range fig.figure {
+			for i, v := range row {
+				if string(v) != Skip {
+					coord := Coord{i + fig.x, j + fig.y}
+					if vboard[coord] {
+						return false
+					} else {
+						vboard[coord] = true
 					}
 				}
 			}
@@ -406,4 +400,57 @@ func solutions(board Board, figures []Figure, left map[string]int) []Board {
 	}
 
 	return results
+}
+
+func run() {
+	board := Board{
+		board: [][]Pig{
+			pigs("HSP  "),
+			pigs(" AHBP"),
+			pigs(" SRPS"),
+			pigs("HSAPP"),
+			pigs("B HAS"),
+		},
+	}
+
+	figures := []Figure{
+		{
+			"XXX",
+			"X.X",
+		},
+		{
+			"YY.",
+			".YY",
+			".Y.",
+		},
+		{
+			".Z.",
+			".Z.",
+			"ZZZ",
+		},
+		{
+			"VVV",
+			".VV",
+		},
+	}
+
+	// A list of board pieces should left uncovered
+	target := map[string]int{
+		"R": 1,
+		//"S": 2,
+		//"P": 1,
+	}
+
+	results := solutions(board, figures, target)
+	if len(results) < 1 {
+		fmt.Errorf("No results found")
+	}
+}
+
+func main() {
+	// start a simple CPU profile and register
+	// a defer to Stop (flush) the profiling data.
+	defer profile.Start().Stop()
+
+	run()
 }
