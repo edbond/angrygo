@@ -151,7 +151,34 @@ func TestPermutations2(t *testing.T) {
 	if !reflect.DeepEqual(result, expected) {
 		t.Error("Result != Expected", result, " != ", expected)
 	}
+}
 
+func TestPermutations3(t *testing.T) {
+	input := [][]int{
+		{0, 1, 2},
+		{3, 4, 5},
+	}
+
+	expected := [][]int{
+		{0, 3},
+		{1, 3},
+		{2, 3},
+		{0, 4},
+		{1, 4},
+		{2, 4},
+		{0, 5},
+		{1, 5},
+		{2, 5},
+	}
+
+	result := permutations(input)
+	if len(result) != len(expected) {
+		t.Error("Invalid number of permutation results", len(result), "expected", len(expected))
+	}
+
+	if !reflect.DeepEqual(result, expected) {
+		t.Error("Result != Expected", result, " != ", expected)
+	}
 }
 
 func TestFigureCombinations(t *testing.T) {
@@ -205,7 +232,10 @@ func TestFull(t *testing.T) {
 	}
 
 	// A list of board pieces should left uncovered
-	target := []string{"E", "C"}
+	target := map[string]int{
+		"E": 2,
+		"C": 1,
+	}
 
 	// For all combinations of figure rotations AND
 	// all figure positions on board
@@ -216,5 +246,61 @@ func TestFull(t *testing.T) {
 	results := solutions(board, figures, target)
 	if len(results) != 1 {
 		t.Error("No results found")
+	}
+}
+
+func TestBoardValid(t *testing.T) {
+	board := Board{
+		board: [][]Pig{
+			pigs(" ABCD"),
+			pigs("BCFEA"),
+			pigs(" DEFA"),
+			pigs("ABFED"),
+			pigs("DBEA "),
+		},
+		figures: []FigureOnBoard{
+			{
+				figure: Figure{"XX", "XX"},
+				x:      0,
+				y:      0,
+			},
+			{
+				figure: Figure{"YY", "YY"},
+				x:      1,
+				y:      1,
+			},
+		},
+	}
+
+	if board.valid() {
+		t.Errorf("Invalid board returns true for valid()\n%s\n", board)
+	}
+}
+
+func TestBoardValid2(t *testing.T) {
+	board := Board{
+		board: [][]Pig{
+			pigs(" ABCD"),
+			pigs("BCFEA"),
+			pigs(" DEFA"),
+			pigs("ABFED"),
+			pigs("DBEA "),
+		},
+		figures: []FigureOnBoard{
+			{
+				figure: Figure{"XX", "X", "X"},
+				x:      0,
+				y:      0,
+			},
+			{
+				figure: Figure{".Y", ".Y", "YY"},
+				x:      0,
+				y:      1,
+			},
+		},
+	}
+
+	if !board.valid() {
+		t.Errorf("Invalid board returns false for valid()\n%s\n", board)
 	}
 }

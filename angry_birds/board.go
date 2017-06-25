@@ -10,6 +10,8 @@ type Pig rune
 
 type Figure []string
 
+type Coord [2]int
+
 var Skip string = "."
 
 // FigureOnBoard Figure positioned on board
@@ -32,7 +34,7 @@ func (b Board) String() string {
 
 	// Print background
 	for _, row := range b.board {
-		rs := make([]string, 0)
+		rs := []string{}
 		for _, x := range row {
 			rs = append(rs, string(x))
 		}
@@ -54,6 +56,42 @@ func (b Board) String() string {
 	return strings.Join(output, "\n")
 }
 
+// valid returns true if figures on Board doesn't overlap
+func (board Board) valid() bool {
+	for i, f := range board.figures {
+		for n, g := range board.figures {
+			if n == i {
+				continue
+			}
+
+			vboard := map[Coord]bool{}
+
+			for _, fig := range []FigureOnBoard{f, g} {
+				for j, row := range fig.figure {
+					for i, v := range row {
+						if string(v) != Skip {
+							coord := Coord{i + fig.x, j + fig.y}
+							if vboard[coord] {
+								return false
+							} else {
+								vboard[coord] = true
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return true
+}
+
+func (board Board) uncovered() map[string]int {
+	m := map[string]int{}
+	return m
+}
+
+// pigs is a helper function to convert string to array of Pigs
 func pigs(s string) []Pig {
 	var p = make([]Pig, 0)
 	for _, r := range []rune(s) {
@@ -229,7 +267,7 @@ func permutations(input [][]int) [][]int {
 		// increase current index
 		// and reset all to the left
 		i[current_i] += 1
-		for j := 0; j < (current_i - 1); j++ {
+		for j := 0; j < current_i; j++ {
 			i[j] = 0
 		}
 
@@ -263,7 +301,7 @@ func FigureCombinations(rows [][]Figure) [][]Figure {
 	return sets
 }
 
-func solutions(board Board, figures []Figure, left []string) []Board {
+func solutions(board Board, figures []Figure, left map[string]int) []Board {
 	results := []Board{}
 
 	// Slice of figures possible rotations
@@ -278,20 +316,69 @@ func solutions(board Board, figures []Figure, left []string) []Board {
 
 	// For each set of figures position them on board
 	for _, set := range figureSets {
-		coords := [][]int{}
-		for _, f := range set {
+		// say we have a set of 3 figures
+		// for each figure we generate slice of possible positions
+		// [][2]int{ {0,0}, {1,0}, {2,0}, ... }
+		// AND list of indexes for each slice {0, 1, 2, 3, ...} to
+		// get all possible combinations
+		// Pass slice of indexes to permutations function
+		// { {0,1,2,3}, {0,1,2}, {0,1,2,3,4,5} }
+		// Permutation will return slice of combinations of positions
+		// for all figure in set (indexes)
+		// Map from indexes to actual positions of figures
+		// Place figures on board and verify figures don't overlap
+		// Get fields that left on board after figures positioned
+		// and compare with target (left variable)
+
+		coords := make([][][2]int, len(set))
+		indexes := make([][]int, len(set))
+
+		for fi, f := range set {
+			ii := 0
+
 			// get possible position coordinates
 			for j := 0; j < board.height()-f.height(); j++ {
 				for i := 0; i < board.width()-f.width(); i++ {
-					coords = append(coords, []int{i, j})
+					coords[fi] = append(coords[fi], [2]int{i, j})
+
+					indexes[fi] = append(indexes[fi], ii)
+					ii += 1
 				}
 			}
 		}
 
-		fmt.Println("Board,", board)
-		fmt.Println("Figures", set)
-		for i, p := range permutations(coords) {
-			fmt.Println("Positions on board", p)
+		//fmt.Println("Board,", board)
+		//fmt.Println("Figures", set)
+		//fmt.Println("Coords", coords)
+		//fmt.Println("Indexes", indexes)
+
+		for _, p := range permutations(indexes) {
+			//fmt.Println("Positions on board", p)
+
+			board.figures = make([]FigureOnBoard, len(set))
+
+			//var figures = make([][2]int, len(set))
+
+			for i, off := range p {
+				//figures[i] = coords[i][off]
+				c := coords[i][off]
+				f := FigureOnBoard{
+					figure: set[i],
+					x:      c[0],
+					y:      c[1],
+				}
+				board.figures = append(board.figures, f)
+			}
+
+			if board.valid() {
+				leftOnBoard := board.uncovered()
+				if reflect.DeepEqual(leftOnBoard, left) {
+					fmt.Println("Found solution!\n", board)
+				}
+			}
+
+			// Next we put figures on board and check if position valid
+			// and verify what left
 		}
 	}
 
