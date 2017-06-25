@@ -210,30 +210,24 @@ func TestFigureCombinations(t *testing.T) {
 func TestFull(t *testing.T) {
 	figures := []Figure{
 		{
-			".X.",
-			"XXX",
+			"X",
+			"X",
 		},
 		{
-			"YY",
-			"YY",
-			"Y.",
+			"Y",
 		},
 	}
 
 	board := Board{
 		board: [][]Pig{
-			pigs(" ABCD"),
-			pigs("BCFEA"),
-			pigs(" DEFA"),
-			pigs("ABFED"),
-			pigs("DBEA "),
+			pigs(" A"),
+			pigs("BC"),
 		},
 		figures: []FigureOnBoard{},
 	}
 
 	// A list of board pieces should left uncovered
 	target := map[string]int{
-		"E": 2,
 		"C": 1,
 	}
 
@@ -242,9 +236,8 @@ func TestFull(t *testing.T) {
 	// DO following checks:
 	// - figures don't overlap
 	// - board has uncovered requested positions
-
 	results := solutions(board, figures, target)
-	if len(results) != 1 {
+	if len(results) < 1 {
 		t.Error("No results found")
 	}
 }
@@ -302,5 +295,50 @@ func TestBoardValid2(t *testing.T) {
 
 	if !board.valid() {
 		t.Errorf("Invalid board returns false for valid()\n%s\n", board)
+	}
+}
+
+func TestFull2(t *testing.T) {
+	board := Board{
+		board: [][]Pig{
+			pigs("HSP  "),
+			pigs(" AHBP"),
+			pigs(" SRPS"),
+			pigs("HSAPP"),
+			pigs("B HAS"),
+		},
+	}
+
+	figures := []Figure{
+		{
+			"XXX",
+			"X.X",
+		},
+		{
+			"YY.",
+			".YY",
+			".Y.",
+		},
+		{
+			".Z.",
+			".Z.",
+			"ZZZ",
+		},
+		{
+			"VVV",
+			".VV",
+		},
+	}
+
+	// A list of board pieces should left uncovered
+	target := map[string]int{
+		"R": 1,
+		//"S": 2,
+		//"P": 1,
+	}
+
+	results := solutions(board, figures, target)
+	if len(results) < 1 {
+		t.Error("No results found")
 	}
 }

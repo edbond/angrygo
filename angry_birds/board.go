@@ -13,6 +13,7 @@ type Figure []string
 type Coord [2]int
 
 var Skip string = "."
+var Empty string = " "
 
 // FigureOnBoard Figure positioned on board
 // x - horizontal left to right
@@ -88,6 +89,35 @@ func (board Board) valid() bool {
 
 func (board Board) uncovered() map[string]int {
 	m := map[string]int{}
+
+	vboard := map[Coord]string{}
+
+	// Convert board to map of coords to string
+	for j, row := range board.board {
+		for i, v := range row {
+			coord := Coord{i, j}
+			vboard[coord] = string(v)
+		}
+	}
+
+	// Replace vboard position with Covered
+	for _, fig := range board.figures {
+		for j, row := range fig.figure {
+			for i, v := range row {
+				if string(v) != Skip {
+					coord := Coord{fig.x + i, fig.y + j}
+					vboard[coord] = Empty
+				}
+			}
+		}
+	}
+
+	for _, v := range vboard {
+		if string(v) != Empty {
+			m[v] += 1
+		}
+	}
+
 	return m
 }
 
@@ -98,15 +128,6 @@ func pigs(s string) []Pig {
 		p = append(p, Pig(r))
 	}
 	return p
-}
-
-var exampleBoard = Board{
-	[][]Pig{
-		pigs("ABC"),
-		pigs("BCA"),
-		pigs("ABA"),
-	},
-	[]FigureOnBoard{},
 }
 
 func (figure Figure) String() string {
@@ -175,8 +196,8 @@ func Positions(figure Figure, board Board) []FigureOnBoard {
 	bw, bh := board.width(), board.height()
 	fw, fh := figure.width(), figure.height()
 
-	//fmt.Println("Board ", bw, " x ", bh)
-	//fmt.Println("Figure ", fw, " x ", fh)
+	fmt.Println("Board ", bw, " x ", bh)
+	fmt.Println("Figure ", fw, " x ", fh)
 
 	for x := 0; x <= bw-fw; x++ {
 		for y := 0; y <= bh-fh; y++ {
@@ -337,8 +358,8 @@ func solutions(board Board, figures []Figure, left map[string]int) []Board {
 			ii := 0
 
 			// get possible position coordinates
-			for j := 0; j < board.height()-f.height(); j++ {
-				for i := 0; i < board.width()-f.width(); i++ {
+			for j := 0; j <= board.height()-f.height(); j++ {
+				for i := 0; i <= board.width()-f.width(); i++ {
 					coords[fi] = append(coords[fi], [2]int{i, j})
 
 					indexes[fi] = append(indexes[fi], ii)
@@ -370,15 +391,17 @@ func solutions(board Board, figures []Figure, left map[string]int) []Board {
 				board.figures = append(board.figures, f)
 			}
 
-			if board.valid() {
-				leftOnBoard := board.uncovered()
-				if reflect.DeepEqual(leftOnBoard, left) {
-					fmt.Println("Found solution!\n", board)
-				}
-			}
-
 			// Next we put figures on board and check if position valid
 			// and verify what left
+			if board.valid() {
+				leftOnBoard := board.uncovered()
+				fmt.Println("Left on board", leftOnBoard)
+				if reflect.DeepEqual(leftOnBoard, left) {
+					fmt.Printf("Found solution!\n%s\n", board)
+					results = append(results, board)
+					return results
+				}
+			}
 		}
 	}
 
