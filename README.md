@@ -36,3 +36,27 @@ R
 
 S
 ![Sleepy](https://github.com/edbond/angrygo/blob/master/angry_birds/S%20-%20Sleepy.png)
+
+
+# Example output
+
+Running `/usr/bin/time -lp ./angry_birds`
+
+```
+....
+Left on board map[B:1 S:2 A:1 R:1]
+Left on board map[H:1 A:2 S:2]
+Left on board map[H:1 B:1 P:1 R:1 S:1]
+Left on board map[H:1 P:2]
+Found solution!
+VVP
+VVXXX
+VZXYX
+HZYYP
+ZZZYY
+Total variants checked: 2333550
+Total valid variants: 200
+real         4.46
+user         4.73
+sys          0.14
+   7770112  maximum resident set size```
