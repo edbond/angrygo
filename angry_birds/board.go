@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-import "github.com/pkg/profile"
-
 type Pig rune
 
 type Figure []string
@@ -450,7 +448,7 @@ func run() {
 func main() {
 	// start a simple CPU profile and register
 	// a defer to Stop (flush) the profiling data.
-	defer profile.Start().Stop()
+	//defer profile.Start().Stop()
 
 	run()
 }
