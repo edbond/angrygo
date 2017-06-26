@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/edbond/angrygo.svg?branch=master)](https://travis-ci.org/edbond/angrygo)
+
+
 # Description
 
 The code is example of brute force solver for angry birds puzzle.
