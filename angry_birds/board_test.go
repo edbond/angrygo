@@ -1,4 +1,4 @@
-package main
+package angry_birds
 
 import (
 	"fmt"
@@ -44,9 +44,9 @@ func TestPositions(t *testing.T) {
 
 	b := Board{
 		[][]Pig{
-			pigs("ABC"),
-			pigs("BCD"),
-			pigs("ABC"),
+			Pigs("ABC"),
+			Pigs("BCD"),
+			Pigs("ABC"),
 		},
 		[]FigureOnBoard{},
 	}
@@ -68,9 +68,9 @@ func TestBoardPrinting(t *testing.T) {
 
 	b := Board{
 		[][]Pig{
-			pigs("ABCD"),
-			pigs("BCDA"),
-			pigs("DACB"),
+			Pigs("ABCD"),
+			Pigs("BCDA"),
+			Pigs("DACB"),
 		},
 		[]FigureOnBoard{
 			{f, 1, 1},
@@ -219,9 +219,9 @@ func TestFull(t *testing.T) {
 	}
 
 	board := Board{
-		board: [][]Pig{
-			pigs(" A"),
-			pigs("BC"),
+		Board: [][]Pig{
+			Pigs(" A"),
+			Pigs("BC"),
 		},
 		figures: []FigureOnBoard{},
 	}
@@ -236,7 +236,7 @@ func TestFull(t *testing.T) {
 	// DO following checks:
 	// - figures don't overlap
 	// - board has uncovered requested positions
-	results := solutions(board, figures, target)
+	results := Solutions(board, figures, target)
 	if len(results) < 1 {
 		t.Error("No results found")
 	}
@@ -244,12 +244,12 @@ func TestFull(t *testing.T) {
 
 func TestBoardValid(t *testing.T) {
 	board := Board{
-		board: [][]Pig{
-			pigs(" ABCD"),
-			pigs("BCFEA"),
-			pigs(" DEFA"),
-			pigs("ABFED"),
-			pigs("DBEA "),
+		Board: [][]Pig{
+			Pigs(" ABCD"),
+			Pigs("BCFEA"),
+			Pigs(" DEFA"),
+			Pigs("ABFED"),
+			Pigs("DBEA "),
 		},
 		figures: []FigureOnBoard{
 			{
@@ -272,12 +272,12 @@ func TestBoardValid(t *testing.T) {
 
 func TestBoardValid2(t *testing.T) {
 	board := Board{
-		board: [][]Pig{
-			pigs(" ABCD"),
-			pigs("BCFEA"),
-			pigs(" DEFA"),
-			pigs("ABFED"),
-			pigs("DBEA "),
+		Board: [][]Pig{
+			Pigs(" ABCD"),
+			Pigs("BCFEA"),
+			Pigs(" DEFA"),
+			Pigs("ABFED"),
+			Pigs("DBEA "),
 		},
 		figures: []FigureOnBoard{
 			{
@@ -300,12 +300,12 @@ func TestBoardValid2(t *testing.T) {
 
 func TestFull2(t *testing.T) {
 	board := Board{
-		board: [][]Pig{
-			pigs("HSP  "),
-			pigs(" AHBP"),
-			pigs(" SRPS"),
-			pigs("HSAPP"),
-			pigs("B HAS"),
+		Board: [][]Pig{
+			Pigs("HSP  "),
+			Pigs(" AHBP"),
+			Pigs(" SRPS"),
+			Pigs("HSAPP"),
+			Pigs("B HAS"),
 		},
 	}
 
@@ -337,7 +337,7 @@ func TestFull2(t *testing.T) {
 		//"P": 1,
 	}
 
-	results := solutions(board, figures, target)
+	results := Solutions(board, figures, target)
 	if len(results) < 1 {
 		t.Error("No results found")
 	}

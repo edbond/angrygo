@@ -1,4 +1,4 @@
-package main
+package angry_birds
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ type FigureOnBoard struct {
 }
 
 type Board struct {
-	board   [][]Pig
+	Board   [][]Pig
 	figures []FigureOnBoard
 }
 
@@ -34,7 +34,7 @@ func (b Board) String() string {
 	output := []string{}
 
 	// Print background
-	for _, row := range b.board {
+	for _, row := range b.Board {
 		rs := []string{}
 		for _, x := range row {
 			rs = append(rs, string(x))
@@ -85,7 +85,7 @@ func (board Board) uncovered() map[string]int {
 	vboard := map[Coord]string{}
 
 	// Convert board to map of coords to string
-	for j, row := range board.board {
+	for j, row := range board.Board {
 		for i, v := range row {
 			coord := Coord{i, j}
 			vboard[coord] = string(v)
@@ -114,7 +114,7 @@ func (board Board) uncovered() map[string]int {
 }
 
 // pigs is a helper function to convert string to array of Pigs
-func pigs(s string) []Pig {
+func Pigs(s string) []Pig {
 	var p = make([]Pig, 0)
 	for _, r := range []rune(s) {
 		p = append(p, Pig(r))
@@ -175,11 +175,11 @@ func (figure Figure) height() int {
 }
 
 func (board Board) width() int {
-	return len(board.board[0])
+	return len(board.Board[0])
 }
 
 func (board Board) height() int {
-	return len(board.board)
+	return len(board.Board)
 }
 
 // Positions returns possible positions of figure on board
@@ -314,7 +314,7 @@ func FigureCombinations(rows [][]Figure) [][]Figure {
 	return sets
 }
 
-func solutions(board Board, figures []Figure, left map[string]int) []Board {
+func Solutions(board Board, figures []Figure, left map[string]int) []Board {
 	results := []Board{}
 
 	// Slice of figures possible rotations
@@ -326,6 +326,9 @@ func solutions(board Board, figures []Figure, left map[string]int) []Board {
 
 	// Get possible combinations
 	figureSets := FigureCombinations(rots)
+
+	total := 0
+	totalValid := 0
 
 	// For each set of figures position them on board
 	for _, set := range figureSets {
@@ -385,11 +388,15 @@ func solutions(board Board, figures []Figure, left map[string]int) []Board {
 
 			// Next we put figures on board and check if position valid
 			// and verify what left
+			total += 1
 			if board.valid() {
+				totalValid += 1
 				leftOnBoard := board.uncovered()
 				fmt.Println("Left on board", leftOnBoard)
 				if reflect.DeepEqual(leftOnBoard, left) {
 					fmt.Printf("Found solution!\n%s\n", board)
+					fmt.Printf("Total variants checked: %d\n", total)
+					fmt.Printf("Total valid variants: %d\n", totalValid)
 					results = append(results, board)
 					return results
 				}
@@ -398,57 +405,4 @@ func solutions(board Board, figures []Figure, left map[string]int) []Board {
 	}
 
 	return results
-}
-
-func run() {
-	board := Board{
-		board: [][]Pig{
-			pigs("HSP  "),
-			pigs(" AHBP"),
-			pigs(" SRPS"),
-			pigs("HSAPP"),
-			pigs("B HAS"),
-		},
-	}
-
-	figures := []Figure{
-		{
-			"XXX",
-			"X.X",
-		},
-		{
-			"YY.",
-			".YY",
-			".Y.",
-		},
-		{
-			".Z.",
-			".Z.",
-			"ZZZ",
-		},
-		{
-			"VVV",
-			".VV",
-		},
-	}
-
-	// A list of board pieces should left uncovered
-	target := map[string]int{
-		"R": 1,
-		//"S": 2,
-		//"P": 1,
-	}
-
-	results := solutions(board, figures, target)
-	if len(results) < 1 {
-		fmt.Errorf("No results found")
-	}
-}
-
-func main() {
-	// start a simple CPU profile and register
-	// a defer to Stop (flush) the profiling data.
-	//defer profile.Start().Stop()
-
-	run()
 }
