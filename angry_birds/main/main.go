@@ -1,8 +1,9 @@
 package main
 
-import "fmt"
 import (
-	"awesomeProject/angry_birds"
+	"fmt"
+
+	"github.com/edbond/angrygo/angry_birds"
 )
 
 func run() {
