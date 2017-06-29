@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/edbond/angrygo/branch/master/graph/badge.svg)](https://codecov.io/gh/edbond/angrygo)
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/edbond/angrygo)](https://goreportcard.com/report/github.com/edbond/angrygo)
 
 # Description
 
