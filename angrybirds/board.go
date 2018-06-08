@@ -1,4 +1,4 @@
-package angry_birds
+package angrybirds
 
 import (
 	"fmt"
@@ -7,13 +7,11 @@ import (
 )
 
 type Pig rune
-
 type Figure []string
-
 type Coord [2]int
 
-var Skip string = "."
-var Empty string = " "
+var Skip = "."
+var Empty = " "
 
 // FigureOnBoard Figure positioned on board
 // x - horizontal left to right
@@ -24,6 +22,7 @@ type FigureOnBoard struct {
 	y      int
 }
 
+// Board holds Pigs and figures
 type Board struct {
 	Board   [][]Pig
 	figures []FigureOnBoard
@@ -58,19 +57,18 @@ func (b Board) String() string {
 }
 
 // valid returns true if figures on Board doesn't overlap
-func (board Board) valid() bool {
+func (b Board) valid() bool {
 	vboard := map[Coord]bool{}
 
-	for _, fig := range board.figures {
+	for _, fig := range b.figures {
 		for j, row := range fig.figure {
 			for i, v := range row {
 				if string(v) != Skip {
 					coord := Coord{i + fig.x, j + fig.y}
 					if vboard[coord] {
 						return false
-					} else {
-						vboard[coord] = true
 					}
+					vboard[coord] = true
 				}
 			}
 		}
@@ -79,13 +77,13 @@ func (board Board) valid() bool {
 	return true
 }
 
-func (board Board) uncovered() map[string]int {
+func (b Board) uncovered() map[string]int {
 	m := map[string]int{}
 
 	vboard := map[Coord]string{}
 
 	// Convert board to map of coords to string
-	for j, row := range board.Board {
+	for j, row := range b.Board {
 		for i, v := range row {
 			coord := Coord{i, j}
 			vboard[coord] = string(v)
@@ -93,7 +91,7 @@ func (board Board) uncovered() map[string]int {
 	}
 
 	// Replace vboard position with Covered
-	for _, fig := range board.figures {
+	for _, fig := range b.figures {
 		for j, row := range fig.figure {
 			for i, v := range row {
 				if string(v) != Skip {
@@ -106,14 +104,14 @@ func (board Board) uncovered() map[string]int {
 
 	for _, v := range vboard {
 		if string(v) != Empty {
-			m[v] += 1
+			m[v]++
 		}
 	}
 
 	return m
 }
 
-// pigs is a helper function to convert string to array of Pigs
+// Pigs is a helper function to convert string to array of Pigs
 func Pigs(s string) []Pig {
 	var p = make([]Pig, 0)
 	for _, r := range []rune(s) {
@@ -174,12 +172,12 @@ func (figure Figure) height() int {
 	return len(figure)
 }
 
-func (board Board) width() int {
-	return len(board.Board[0])
+func (b Board) width() int {
+	return len(b.Board[0])
 }
 
-func (board Board) height() int {
-	return len(board.Board)
+func (b Board) height() int {
+	return len(b.Board)
 }
 
 // Positions returns possible positions of figure on board
@@ -204,12 +202,12 @@ func Positions(figure Figure, board Board) []FigureOnBoard {
 // excluding duplicates
 func rotations(f Figure) []Figure {
 	results := []Figure{f}
-	var r Figure = f
+	var r = f
 
 	for range []int{1, 2, 3} {
 		r = r.RotateCW()
 
-		var found bool = false
+		found := false
 
 		// Find if there is already such rotation
 		for _, x := range results {
@@ -231,7 +229,7 @@ func permutations(input [][]int) [][]int {
 	l := len(input)
 	i := make([]int, l)
 
-	current_i := 0
+	currentI := 0
 
 	// last index of each row
 	ends := make([]int, l)
@@ -267,7 +265,7 @@ func permutations(input [][]int) [][]int {
 		found = false
 		for j := range i {
 			if i[j] < ends[j] {
-				current_i = j
+				currentI = j
 				found = true
 				break
 			}
@@ -279,8 +277,8 @@ func permutations(input [][]int) [][]int {
 
 		// increase current index
 		// and reset all to the left
-		i[current_i] += 1
-		for j := 0; j < current_i; j++ {
+		i[currentI]++
+		for j := 0; j < currentI; j++ {
 			i[j] = 0
 		}
 
@@ -358,7 +356,7 @@ func Solutions(board Board, figures []Figure, left map[string]int) []Board {
 					coords[fi] = append(coords[fi], [2]int{i, j})
 
 					indexes[fi] = append(indexes[fi], ii)
-					ii += 1
+					ii++
 				}
 			}
 		}
@@ -388,11 +386,11 @@ func Solutions(board Board, figures []Figure, left map[string]int) []Board {
 
 			// Next we put figures on board and check if position valid
 			// and verify what left
-			total += 1
+			total++
 			if board.valid() {
-				totalValid += 1
+				totalValid++
 				leftOnBoard := board.uncovered()
-				fmt.Println("Left on board", leftOnBoard)
+				// fmt.Println("Left on board", leftOnBoard)
 				if reflect.DeepEqual(leftOnBoard, left) {
 					fmt.Printf("Found solution!\n%s\n", board)
 					fmt.Printf("Total variants checked: %d\n", total)

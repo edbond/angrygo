@@ -1,23 +1,24 @@
 package main
 
 import (
+	"angrygo/angrybirds"
 	"fmt"
 
-	"github.com/edbond/angrygo/angry_birds"
+	"github.com/pkg/profile"
 )
 
-func run() {
-	board := angry_birds.Board{
-		Board: [][]angry_birds.Pig{
-			angry_birds.Pigs("HSP  "),
-			angry_birds.Pigs(" AHBP"),
-			angry_birds.Pigs(" SRPS"),
-			angry_birds.Pigs("HSAPP"),
-			angry_birds.Pigs("B HAS"),
+func run() error {
+	board := angrybirds.Board{
+		Board: [][]angrybirds.Pig{
+			angrybirds.Pigs("HSP  "),
+			angrybirds.Pigs(" AHBP"),
+			angrybirds.Pigs(" SRPS"),
+			angrybirds.Pigs("HSAPP"),
+			angrybirds.Pigs("B HAS"),
 		},
 	}
 
-	figures := []angry_birds.Figure{
+	figures := []angrybirds.Figure{
 		{
 			"XXX",
 			"X.X",
@@ -45,16 +46,17 @@ func run() {
 		"P": 2,
 	}
 
-	results := angry_birds.Solutions(board, figures, target)
+	results := angrybirds.Solutions(board, figures, target)
 	if len(results) < 1 {
-		fmt.Errorf("No results found")
+		return fmt.Errorf("No results found")
 	}
+	return nil
 }
 
 func main() {
 	// start a simple CPU profile and register
 	// a defer to Stop (flush) the profiling data.
-	//defer profile.Start().Stop()
+	defer profile.Start().Stop()
 
 	run()
 }

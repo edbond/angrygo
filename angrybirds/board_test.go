@@ -1,4 +1,4 @@
-package angry_birds
+package angrybirds
 
 import (
 	"fmt"
