@@ -1,10 +1,9 @@
 package main
 
 import (
-	"angrygo/angrybirds"
 	"fmt"
 
-	"github.com/pkg/profile"
+	"github.com/edbond/angrygo/angrybirds"
 )
 
 func run() error {
@@ -42,7 +41,7 @@ func run() error {
 	// A list of board pieces should left uncovered
 	target := map[string]int{
 		"H": 1,
-		//"A": 2,
+		"A": 2,
 		"P": 2,
 	}
 
@@ -56,7 +55,10 @@ func run() error {
 func main() {
 	// start a simple CPU profile and register
 	// a defer to Stop (flush) the profiling data.
-	defer profile.Start().Stop()
+	// defer profile.Start().Stop()
 
-	run()
+	err := run()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
