@@ -13,40 +13,40 @@ to hide pigs. Challenge list pigs that should be left uncovered.
 
 # Board
 
-![Board](https://github.com/edbond/angrygo/blob/master/angry_birds/board.jpg)
+![Board](https://github.com/edbond/angrygo/blob/master/angrybirds/board.jpg)
 
 # Figures
 
-![Figures](https://github.com/edbond/angrygo/blob/master/angry_birds/figures.jpg)
+![Figures](https://github.com/edbond/angrygo/blob/master/angrybirds/figures.jpg)
 
 # Challenge
 
-![Challenge](https://github.com/edbond/angrygo/blob/master/angry_birds/challenge.jpg)
+![Challenge](https://github.com/edbond/angrygo/blob/master/angrybirds/challenge.jpg)
 
 # Pigs
 
 A
-![Angry](https://github.com/edbond/angrygo/blob/master/angry_birds/A%20-%20Angry.png)
+![Angry](https://github.com/edbond/angrygo/blob/master/angrybirds/A%20-%20Angry.png)
 
 B
-![Beaten](https://github.com/edbond/angrygo/blob/master/angry_birds/B%20-%20Beaten.png)
+![Beaten](https://github.com/edbond/angrygo/blob/master/angrybirds/B%20-%20Beaten.png)
 
 H
-![Hat](https://github.com/edbond/angrygo/blob/master/angry_birds/H%20-%20Hat.png)
+![Hat](https://github.com/edbond/angrygo/blob/master/angrybirds/H%20-%20Hat.png)
 
 P
-![Pig](https://github.com/edbond/angrygo/blob/master/angry_birds/P%20-%20Pig.png)
+![Pig](https://github.com/edbond/angrygo/blob/master/angrybirds/P%20-%20Pig.png)
 
 R
-![Red](https://github.com/edbond/angrygo/blob/master/angry_birds/R%20-%20Red.png)
+![Red](https://github.com/edbond/angrygo/blob/master/angrybirds/R%20-%20Red.png)
 
 S
-![Sleepy](https://github.com/edbond/angrygo/blob/master/angry_birds/S%20-%20Sleepy.png)
+![Sleepy](https://github.com/edbond/angrygo/blob/master/angrybirds/S%20-%20Sleepy.png)
 
 
 # Example output
 
-Running `/usr/bin/time -lp ./angry_birds`
+Running `/usr/bin/time -lp ./angrybirds`
 
 ```
 ....
